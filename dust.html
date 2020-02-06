@@ -1,0 +1,106 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>First Pixi</title>
+    <style>* {padding: 0; margin: 0}</style>
+</head>
+
+<script src="pixi.js"></script>
+<script src="dust.js"></script>
+<body>
+<script type="text/javascript">
+    let type = "WebGL";
+    if(!PIXI.utils.isWebGLSupported()){
+        type = "canvas";
+    }
+
+    PIXI.utils.sayHello(type);
+    let d = new Dust(PIXI);
+
+    //Aliases
+    let Application = PIXI.Application,
+        loader = PIXI.loader,
+        resources = PIXI.loader.resources,
+        Sprite = PIXI.Sprite;
+
+    let app = new PIXI.Application({
+            width: 256,         // default: 800
+            height: 256,        // default: 600
+            antialias: true,    // default: false
+            transparent: false, // default: false
+            resolution: 1       // default: 1
+        }
+    );
+    app.renderer.backgroundColor = 0x3D2D34;
+
+    app.renderer.autoResize = true;
+    app.renderer.resize(512, 512);
+
+    app.renderer.view.style.position = "absolute";
+    app.renderer.view.style.display = "block";
+    app.renderer.autoResize = true;
+    app.renderer.resize(window.innerWidth, window.innerHeight);
+
+    let TextureCache = PIXI.utils.TextureCache;
+    document.body.appendChild(app.view);
+
+    //load an image and run the `setup` function when it's done
+    loader
+        .add("images/cat.png")
+        .load(setup);
+
+    //This `setup` function will run when the image has loaded
+    function setup() {
+
+        //Create the `ParticleContainer` and add it to the `stage`
+        let starContainer = new PIXI.ParticleContainer(
+            15000,
+            {alpha: true, scale: true, rotation: true, uvs: true}
+        );
+        app.stage.addChild(starContainer);
+
+        let stars = d.create(
+            window.innerWidth/2 +40,                                       //x start position
+            window.innerHeight/2 + 40,                                       //y start position
+            () => new PIXI.Sprite(                     //Sprite function
+                TextureCache["cat.png"]
+            ),
+            starContainer,                                     //Container for particles
+            5000,                                        //Number of particles
+            0.01,                                  //Gravity
+            true,                                 //Random spacing
+            0, 6.28,                              //Min/max angle
+            12, 40,                               //Min/max size
+            1, 2,                                 //Min/max speed
+            0.005, 0.01,                          //Min/max scale speed
+            0.005, 0.01,                          //Min/max alpha speed
+            0.05, 0.1                             //Min/max rotation speed
+        );
+
+
+
+        //Create the cat spritee
+        let cat = new Sprite(resources["images/cat.png"].texture);
+
+        //Change the sprite's position
+        cat.x = window.innerWidth/2;
+        cat.y = window.innerHeight/2;
+
+        cat.width = 80;
+        cat.height = 80;
+
+        //Add the cat to the stage
+        app.stage.addChild(cat);
+
+        gameLoop();
+    }
+
+    function gameLoop() {
+        requestAnimationFrame(gameLoop);
+        d.update();
+    }
+
+</script>
+</body>
+</html>

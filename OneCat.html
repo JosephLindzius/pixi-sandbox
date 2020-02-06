@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>First Pixi</title>
+    <style>* {padding: 0; margin: 0}</style>
+</head>
+
+<script src="pixi.js"></script>
+<body>
+<script type="text/javascript">
+    let type = "WebGL";
+    if(!PIXI.utils.isWebGLSupported()){
+        type = "canvas";
+    }
+
+    PIXI.utils.sayHello(type);
+
+    //Aliases
+    let Application = PIXI.Application,
+        loader = PIXI.loader,
+        resources = PIXI.loader.resources,
+        Sprite = PIXI.Sprite;
+
+    let app = new PIXI.Application({
+            width: 256,         // default: 800
+            height: 256,        // default: 600
+            antialias: true,    // default: false
+            transparent: false, // default: false
+            resolution: 1       // default: 1
+        }
+    );
+    app.renderer.backgroundColor = 0x3D2D34;
+
+    app.renderer.autoResize = true;
+    app.renderer.resize(512, 512);
+
+    app.renderer.view.style.position = "absolute";
+    app.renderer.view.style.display = "block";
+    app.renderer.autoResize = true;
+    app.renderer.resize(window.innerWidth, window.innerHeight);
+
+
+    document.body.appendChild(app.view);
+
+    //load an image and run the `setup` function when it's done
+    loader
+        .add("images/cat.png")
+        .load(setup);
+
+    //This `setup` function will run when the image has loaded
+    function setup() {
+
+        //Create the cat spritee
+        let cat = new Sprite(resources["images/cat.png"].texture);
+
+        //Change the sprite's position
+        cat.x = window.innerWidth/2;
+        cat.y = window.innerHeight/2;
+
+        cat.width = 80;
+        cat.height = 80;
+
+        cat.rotation = 0.5;
+        //Add the cat to the stage
+        app.stage.addChild(cat);
+    }
+
+
+</script>
+</body>
+</html>

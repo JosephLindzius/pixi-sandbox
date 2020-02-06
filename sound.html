@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script src="sound.js"></script>
+<script>
+    //Load the sounds
+
+    sounds.load([
+        "sounds/shoot.wav",
+        "sounds/music.wav",
+        "sounds/bounce.mp3"
+    ]);
+
+    //Assign the callback function that should run
+    //each time a file loaded, just like PIXI.js
+    sounds.onProgress = function (progress, res) {
+        console.log('Total ' + progress + ' file(s) loaded.');
+        console.log('File ' + res.url + ' just finished loading.');
+    };
+
+    //Assign the callback function that should run
+    //when the sounds have loaded
+    sounds.whenLoaded = setup;
+</script>
+</body>
+</html>
